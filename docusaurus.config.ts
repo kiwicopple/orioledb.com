@@ -35,18 +35,14 @@ const config: Config = {
       {
         docs: {
           sidebarPath: "./sidebars.ts",
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
           editUrl:
-            "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/",
+            "https://github.com/orioledb/orioledb/edit/main/orioledb.com/docs/",
           sidebarCollapsed: false,
         },
         blog: {
           showReadingTime: true,
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
           editUrl:
-            "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/",
+            "https://github.com/orioledb/orioledb/edit/main/orioledb.com/blog/",
         },
         theme: {
           customCss: "./src/css/custom.css",
@@ -59,16 +55,30 @@ const config: Config = {
     // Replace with your project's social card
     image: "img/docusaurus-social-card.jpg",
     navbar: {
-      title: "OrioleDB",
+      // title: "OrioleDB",
       logo: {
         alt: "OrioleDB",
-        src: "img/logo.svg",
+        src: "img/logo-horizontal.png",
       },
       items: [
-        { to: "/docs", label: "Docs", position: "right" },
+        {
+          type: "dropdown",
+          label: "Docs",
+          position: "right",
+          items: [
+            {
+              to: "/docs/",
+              label: "Introduction",
+              activeBaseRegex: "docs/$",
+            },
+            { to: "/docs/usage/getting-started", label: "Usage" },
+            { to: "/docs/architecture/overview", label: "Architecture" },
+            { to: "/docs/contributing/code-structure", label: "Contributing" },
+          ],
+        },
         { to: "/blog", label: "Blog", position: "right" },
         {
-          href: "https://github.com/facebook/docusaurus",
+          href: "https://github.com/orioledb/orioledb",
           label: "GitHub",
           position: "right",
         },
@@ -78,11 +88,15 @@ const config: Config = {
       style: "dark",
       links: [
         {
-          title: "Docs",
+          title: "Site",
           items: [
             {
               label: "Docs",
-              to: "/docs/",
+              to: "/docs",
+            },
+            {
+              label: "Blog",
+              to: "/blog",
             },
           ],
         },
@@ -90,29 +104,12 @@ const config: Config = {
           title: "Community",
           items: [
             {
-              label: "Stack Overflow",
-              href: "https://stackoverflow.com/questions/tagged/docusaurus",
-            },
-            {
-              label: "Discord",
-              href: "https://discordapp.com/invite/docusaurus",
+              label: "GitHub",
+              href: "https://github.com/orioledb/orioledb",
             },
             {
               label: "Twitter",
-              href: "https://twitter.com/docusaurus",
-            },
-          ],
-        },
-        {
-          title: "More",
-          items: [
-            {
-              label: "Blog",
-              to: "/blog",
-            },
-            {
-              label: "GitHub",
-              href: "https://github.com/facebook/docusaurus",
+              href: "https://twitter.com/orioledb",
             },
           ],
         },

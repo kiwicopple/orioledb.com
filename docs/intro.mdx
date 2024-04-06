@@ -31,9 +31,11 @@ Something like this is already available in MySQL, which uses the `InnoDB` as th
 
 Read more about the history of pluggable storage [here](https://supabase.com/blog/postgres-pluggable-strorage).
 
-## Using OrioleDB
+## Using OrioleDB with existing PostgreSQL installations
 
 OrioleDB currently requires a set of patches to PostgreSQL to enable the pluggable storage engine. All of these patches have been submitted to the PostgreSQL community and are currently under review. Once these patches are accepted, OrioleDB will be able to run on any PostgreSQL installation without any modifications.
+
+Until then, you can use our [pre-built Docker image](https://hub.docker.com/r/orioledb/orioledb) to try out OrioleDB. The Docker image includes a patched version of PostgreSQL with OrioleDB pre-installed. Follow the [Getting started](/docs/usage/getting-started) guide to get started.
 
 ## Patch set
 

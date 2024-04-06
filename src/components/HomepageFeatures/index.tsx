@@ -1,17 +1,18 @@
 import clsx from "clsx"
 import Heading from "@theme/Heading"
 import styles from "./styles.module.css"
+import { icons } from "lucide-react"
 
 type FeatureItem = {
   title: string
-  Svg: React.ComponentType<React.ComponentProps<"svg">>
+  icon: string
   description: JSX.Element
 }
 
 const FeatureList: FeatureItem[] = [
   {
     title: "Scalability",
-    Svg: require("@site/static/img/undraw_docusaurus_mountain.svg").default,
+    icon: "LineChart",
     description: (
       <>
         The novel design of OrioleDB avoids typical bottlenecks of database
@@ -20,18 +21,18 @@ const FeatureList: FeatureItem[] = [
     ),
   },
   {
-    title: "IO-Reduction",
-    Svg: require("@site/static/img/undraw_docusaurus_tree.svg").default,
+    title: "IO Reduction",
+    icon: "ArrowDownUp",
     description: (
       <>
-        Write transactions produce noticeably less IO thanks to logical WAL and
-        non-persistent undo log.
+        Logical WAL and non-persistent undo log for less IO from write
+        transactions.
       </>
     ),
   },
   {
     title: "Data Compression",
-    Svg: require("@site/static/img/undraw_docusaurus_react.svg").default,
+    icon: "ArrowDownWideNarrow",
     description: (
       <>
         Page-level data compression reduces typical database size in 4-5 times.
@@ -40,37 +41,47 @@ const FeatureList: FeatureItem[] = [
   },
   {
     title: "Bloat Reduction",
-    Svg: require("@site/static/img/undraw_docusaurus_react.svg").default,
+    icon: "Trash2",
     description: <>Less bloat thanks to efficiently handled in-place update.</>,
   },
   {
     title: "Less Maintenance",
-    Svg: require("@site/static/img/undraw_docusaurus_react.svg").default,
+    icon: "Blocks",
     description: (
       <>Lower maintenance required resulting in less operational costs.</>
     ),
   },
   {
     title: "High Transaction Throughput",
-    Svg: require("@site/static/img/undraw_docusaurus_react.svg").default,
+    icon: "FastForward",
     description: (
       <>Efficient transactional processing leads to high throughput.</>
     ),
   },
 ]
 
-function Feature({ title, Svg, description }: FeatureItem) {
+function Feature({ title, icon, description }: FeatureItem) {
   return (
-    <div className={clsx("col col--4")}>
-      <div className="text--center">
-        <Svg className={styles.featureSvg} role="img" />
-      </div>
-      <div className="text--center padding-horiz--md">
-        <Heading as="h3">{title}</Heading>
-        <p>{description}</p>
+    <div className={clsx("col col--4 padding--md")}>
+      <div className={clsx("card shadow--md")}>
+        <div className="card__header ">
+          <div className="">
+            <Icon size={28} name={icon} />
+          </div>
+          <Heading as="h3">{title}</Heading>
+        </div>
+        <div className="card__body">
+          <p>{description}</p>
+        </div>
       </div>
     </div>
   )
+}
+
+const Icon = ({ name, size }) => {
+  const LucideIcon = icons[name]
+
+  return <LucideIcon size={size} />
 }
 
 export default function HomepageFeatures(): JSX.Element {

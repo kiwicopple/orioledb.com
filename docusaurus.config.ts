@@ -39,6 +39,7 @@ const config: Config = {
           // Remove this to remove the "edit this page" links.
           editUrl:
             "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/",
+          sidebarCollapsed: false,
         },
         blog: {
           showReadingTime: true,
@@ -64,13 +65,8 @@ const config: Config = {
         src: "img/logo.svg",
       },
       items: [
-        {
-          type: "docSidebar",
-          sidebarId: "tutorialSidebar",
-          position: "left",
-          label: "Tutorial",
-        },
-        { to: "/blog", label: "Blog", position: "left" },
+        { to: "/docs", label: "Docs", position: "right" },
+        { to: "/blog", label: "Blog", position: "right" },
         {
           href: "https://github.com/facebook/docusaurus",
           label: "GitHub",
@@ -85,8 +81,8 @@ const config: Config = {
           title: "Docs",
           items: [
             {
-              label: "Tutorial",
-              to: "/docs/intro",
+              label: "Docs",
+              to: "/docs/",
             },
           ],
         },
@@ -127,6 +123,16 @@ const config: Config = {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,
     },
+    plugins: [
+      [
+        "@docusaurus/plugin-content-docs",
+        {
+          id: "docs-intro",
+          path: "docs",
+          routeBasePath: "/docs",
+        },
+      ],
+    ],
   } satisfies Preset.ThemeConfig,
 }
 

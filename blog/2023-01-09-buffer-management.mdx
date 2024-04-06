@@ -2,12 +2,12 @@
 slug: buffer-management
 title: Rethinking buffer mapping for modern hardware architectures
 authors: [alexander_korotkov]
-tags: [release-notes]
+tags: [deep-dive]
 ---
 
-### Original Design Implications
-
 Traditional database engines were designed in the '80s and early '90s. At that time CPUs were much slower than they are today. Even worse was storage, hard drive head positioning time was enormous[^1]. And CPU (or, at most, a few single-core CPUs) was assumed to be infinitely fast in comparison to IOPS. Therefore, systems were designed to save IOPS as much as possible, while CPU overhead was considered a secondary optimization target.
+
+{/* truncate */}
 
 Nowadays, modern storage systems including NVMe and virtual distributed storage can produce millions of IOPS. Modern machines can have many terabytes of main memory allowing them to store the entire database or at least the active part. Also, they can include hundreds of CPU cores. Simply put, traditional assumptions are out of date and database engines need to evolve to leverage modern hardware.
 

@@ -3,10 +3,12 @@ slug: wraparound-freeze
 title: Solving the Wraparound Freeze Problem in PostgreSQL
 description: When Hell Freezes Over?
 authors: [alexander_korotkov]
-tags: [release-notes]
+tags: [deep-dive]
 ---
 
 Postgres is great… until it's not... In the past few years, there have been a few major public outages of a cloud service, like [MailChimp's Mandril](https://mailchimp.com/what-we-learned-from-the-recent-mandrill-outage/), [Joyent's Manta Storage](https://www.tritondatacenter.com/blog/manta-postmortem-7-27-2015), and [Sentry's monitoring service](https://blog.sentry.io/transaction-id-wraparound-in-postgres/). Invariably, the outages affect applications that use Postgres in write-heavy workloads.
+
+{/* truncate */}
 
 As cloud-based services go through a drastic growth spurt, the expectations for their Postgres-centered storage are expected to keep up. Simply scaling up the size of the server that runs Postgres does not fix certain problems that come with growth in traffic.
 

@@ -14,7 +14,7 @@ function HomepageHeader() {
     <header className={clsx("hero hero--primary", styles.heroBanner)}>
       <div className="container">
         <div className="row">
-          <div className="col col--6">
+          <div className="col col--6 padding--lg">
             <Heading as="h1" className="hero__title">
               {siteConfig.tagline}
             </Heading>
@@ -32,7 +32,7 @@ function HomepageHeader() {
               </Link>
             </div>
           </div>
-          <div className="col col--6">
+          <div className="col col--6 padding-top--lg">
             <img
               className={styles.heroImage}
               src="/img/banner.png"
@@ -49,8 +49,8 @@ export default function Home(): JSX.Element {
   const { siteConfig } = useDocusaurusContext()
   return (
     <Layout
-      title={`Hello from ${siteConfig.title}`}
-      description="Description will go into a meta tag in <head />"
+      title={`${siteConfig.title}`}
+      description="OrioleDB is a PostgreSQL extension that combines the advantages of both on-disk and in-memory engines."
     >
       <HomepageHeader />
       <main>

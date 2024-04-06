@@ -6,7 +6,11 @@ const sidebars: SidebarsConfig = {
     {
       type: "category",
       label: "Usage",
-      items: ["usage/getting-started", "usage/decoupled-storage"],
+      items: [
+        "usage/getting-started",
+        "usage/configuration",
+        "usage/decoupled-storage",
+      ],
     },
     {
       type: "category",

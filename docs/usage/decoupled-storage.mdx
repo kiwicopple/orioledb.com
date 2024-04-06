@@ -7,7 +7,13 @@ sidebar_label: Decoupled storage
 
 One of the features that OrioleDB provides is the ability to decouple storage and compute. This is achieved by storing the data in a separate storage layer, such as S3, and running the compute layer on a separate instance. This allows for better scalability and flexibility in managing the data and compute resources.
 
-## S3 database storage (experimental)
+:::warning[Experimental feature]
+
+This feature is currently experimental and should be used with caution.
+
+:::
+
+## S3 database storage
 
 OrioleDB has experimental support for the storage of all tables and materialized views data in the S3 bucket. It is useful for splitting compute and data storage instances, for increasing data safety, and for scaling and changing the architecture of compute instances preserving all data.
 

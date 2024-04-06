@@ -4,6 +4,7 @@ import useDocusaurusContext from "@docusaurus/useDocusaurusContext"
 import Layout from "@theme/Layout"
 import HomepageFeatures from "@site/src/components/HomepageFeatures"
 import HomepageSections from "@site/src/components/HomepageSections"
+import CTA from "@site/src/components/CTA"
 import Heading from "@theme/Heading"
 
 import styles from "./index.module.css"
@@ -24,11 +25,17 @@ function HomepageHeader() {
               performance and cut costs.
             </p>
             <div className={styles.buttons}>
+              <Link className="button button--secondary button--lg" to="/docs">
+                Read the docs
+              </Link>
               <Link
-                className="button button--secondary button--lg"
+                className={clsx(
+                  "secondary-button button button--secondary button--outline button--lg",
+                  styles.secondaryButton
+                )}
                 to="https://github.com/orioledb/orioledb"
               >
-                Visit our GitHub
+                GitHub
               </Link>
             </div>
           </div>
@@ -56,6 +63,7 @@ export default function Home(): JSX.Element {
       <main>
         <HomepageFeatures />
         <HomepageSections />
+        <CTA />
       </main>
     </Layout>
   )

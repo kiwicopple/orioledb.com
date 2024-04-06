@@ -17,4 +17,14 @@
 
 .buttons {
   display: flex;
+  /* add some spacing between elements */
+  gap: 1rem;
+  
+}
+
+.secondaryButton {
+  color: #fff !important;
+}
+.secondaryButton:hover {
+  color: #000 !important;
 }

@@ -7,20 +7,16 @@ export default function HomepageSections(): JSX.Element {
     <>
       <section>
         <div className="container margin-vert--xl">
-          <div className="row">
-            <div className="col col--6 col--offset-3">
-              <div className="text--center">
-                <Heading as="h2" className="text--uppercase">
-                  Scalability
-                </Heading>
-                <p>
-                  OrioleDB utilizes the{" "}
-                  <strong>power of modern hardware</strong> to achieve
-                  extraordinary performance.
-                </p>
-              </div>
-            </div>
+          <div className="text--center">
+            <Heading as="h2" className="text--uppercase">
+              Scalability
+            </Heading>
+            <p>
+              OrioleDB utilizes the <strong>power of modern hardware</strong> to
+              achieve extraordinary performance.
+            </p>
           </div>
+
           <div className="row">
             <div className="col col--6">
               <img

@@ -81,7 +81,7 @@ function Feature({ title, icon, description }: FeatureItem) {
 const Icon = ({ name, size }) => {
   const LucideIcon = icons[name]
 
-  return <LucideIcon size={size} />
+  return <LucideIcon size={size} color={"#064089"} />
 }
 
 export default function HomepageFeatures(): JSX.Element {

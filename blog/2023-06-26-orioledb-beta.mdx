@@ -1,0 +1,27 @@
+---
+slug: orioledb-beta
+title: OrioleDB is now in Beta
+authors: [alexander_korotkov, pavel_borisov]
+tags: [release-notes]
+---
+
+Long story short, OrioleDB alpha version was released more than year ago. More than 200 bugs were fixed since then. Now, OrioleDB reached beta stage. That means we recommend OrioleDB for pre-production testing. The most interesting workloads for testing could include: [high transaction throughput](/blog/wraparound-freeze), high volume of updates, [high volume of in-memory operations](/blog/buffer-management), lock bottlenecks and other extreme cases.
+
+## Key Features in this release
+
+The most notable improvements since alpha release include:
+
+- Support for parallel scan and parallel index build,
+- Various fixes for row-level concurrency and triggers,
+- Fixes for undo log, system trees and transaction mechanism.
+
+## Contributors
+
+Special thanks to our external contributors:
+
+- [Pavel Borisov](https://github.com/pashkinelfe) for implementation of parallel scan and parallel index build,
+- [Imre Samu](https://github.com/ImreSamu) for improvements to Docker container.
+
+## Getting started
+
+Visit our [GitHub](https://github.com/orioledb/orioledb) page to get the latest version of OrioleDB. We are looking forward to your feedback and contributions.

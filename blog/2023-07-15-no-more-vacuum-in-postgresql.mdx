@@ -1,0 +1,84 @@
+---
+slug: no-more-vacuum-in-postgresql
+title: "PostgreSQL: No More VACUUM, No More Bloat"
+authors: [alexander_korotkov]
+tags: [release-notes]
+---
+
+PostgreSQL, a powerful open-source object-relational database system, has been lauded for its robustness, functionality, and flexibility. However, it is not without its challenges – one of which is the notorious VACUUM process. However, the dawn of a new era is upon us with [OrioleDB](https://github.com/orioledb/orioledb), a novel engine designed for PostgreSQL that promises to eliminate the need for the resource-consuming VACUUM.
+
+### The Terrifying Tale of VACUUM in PostgreSQL
+
+The VACUUM process in PostgreSQL is a historical artifact that traces its roots back to the Berkeley Postgres project, which implemented a concept known as infinite time-travel. The concept, while innovative at the time, was eventually dropped by the PostgreSQL community. However, it led to the implementation of a Multi-Version Concurrency Control (MVCC) system prone to table bloat.
+
+The PostgreSQL MVCC system, while beneficial for handling concurrent transactions, introduced the need for manual vacuuming. This was a process in which old, unneeded data was purged to free up space and ensure efficient database operations. Manual vacuuming, however, was a labor-intensive task and a potential source of inefficiencies in the system.
+
+The PostgreSQL community, in their continued efforts to improve the system, introduced autovacuum - an automatic vacuuming process designed to alleviate the need for manual vacuuming. This was a significant step forward, but it was not a perfect solution. The autovacuum process, while automatic, still consumed substantial system resources. This is one of the reasons why [Uber decided to migrate from PostgreSQL to MySQL](https://www.uber.com/en-US/blog/postgres-to-mysql-migration/) and one of the [10 things that Richard Branson hates about PostgreSQL](https://rbranson.medium.com/10-things-i-hate-about-postgresql-20dbab8c2791).
+
+Further enhancements came with the implementation of Heap-Only Tuples (HOT) updates and microvacuum, both significant improvements that reduced the need for full table vacuums. However, despite these advancements, the VACUUM process still remained a resource-intensive operation. Furthermore, PostgreSQL tables remained prone to bloat, an issue that continues to plague many users today. This is the [part of PostgreSQL that the team at OtterTune hates the most](https://ottertune.com/blog/the-part-of-postgresql-we-hate-the-most/).
+
+Despite these challenges, many organizations and developers continue to use and support PostgreSQL. Its robustness, extensibility, and strong community are just a few reasons why. For instance, [OtterTune, despite acknowledging PostgreSQL's problems, has decided to stick with it](https://ottertune.com/blog/yes-postgresql-has-problems-but-were-sticking-with-it/). They explain their reasons in a separate blog post, highlighting the importance of considering the overall benefits and drawbacks of a system before making a decision.
+
+### Enter OrioleDB: The Engine of the Future
+
+OrioleDB is a groundbreaking new engine for PostgreSQL, developed with a primary goal: to save tables from bloat and eliminate the need for regular maintenance like VACUUM. It achieves this through the implementation of row-level and block-level undo logs, as well as automatic page merging.
+
+The undo logs at the row and block level provide a more granular level of control, allowing for more efficient handling of data changes. The automatic page merging feature works tirelessly in the background to consolidate fragmented data, further enhancing the efficiency of the system.
+
+![Techniques](/img/blog/techniques.png)
+
+The figure above illustrates this techniques. Row-level undo log allows in-place updates. Block-level undo log allows to evict tuples, which are deleted but visible to some transactions, from the primary storage leaving more space for new tuples. Automatic merge of sparse pages saves tables and indexes from bloat after many deletes.
+
+The implementation of these features in OrioleDB results in a system that requires less manual intervention, consumes fewer resources, and is less prone to table bloat. This promises a significant improvement in the performance and user experience of PostgreSQL.
+
+### Benchmarks
+
+The following synthetic benchmark can illustrate the OrioleDB advantages of the above as well as some others. The following initialization script creates a table and 5 indexes on it.
+
+```sql
+CREATE TABLE test (
+    id integer primary key,
+    value1 float8 not null,
+    value2 float8 not null,
+    value3 float8 not null,
+    value4 float8 not null,
+    ts timestamp not null
+);
+
+CREATE INDEX test_value1_idx ON test (value1);
+CREATE INDEX test_value2_idx ON test (value2);
+CREATE INDEX test_value3_idx ON test (value3);
+CREATE INDEX test_value4_idx ON test (value4);
+CREATE INDEX test_ts_idx ON test (ts);
+```
+
+The pgbench script is given below. It's an upsert that performs sparse updates of the one of indexes on conflict. The sparse update causes this index to bloat when using regular heap PostgreSQL tables.
+
+```sql
+\set id random(1, 10000000)
+INSERT INTO test VALUES(:id, random(), random(), random(), random(), now() - random() * random() * 1800 * interval '1 second')
+ON CONFLICT (id) DO UPDATE SET ts = now();
+```
+
+This benchmark illustrates the following advantages of OrioleDB design.
+
+1. Thanks to undo log and in-place updates, OrioleDB needs to update only one index, whose value has been changed. With the PostgreSQL heap engine, the update of a single indexed field disables HOT, so all indexes get updated.
+2. Automatic page merge saves sparse index from bloat. Sparse pages are automatically merged.
+3. Row-level WAL takes much less space than block-level WAL. That saves IOPS on WAL writing.
+
+The experiments were made on c5d.18xlarge machine with 100 concurrent connections. See the results of the benchmark on the graphs below.
+
+![Techniques](/img/blog/techniques.png)
+
+As the cumulative result of the improvements discussed above, OrioleDB provides:
+
+- **5X higher TPS**,
+- **2.3X less CPU load per transaction**,
+- **22X less IOPS per transaction**,
+- **No table and index bloat**.
+
+### Embrace the Future: Try OrioleDB Today
+
+With the introduction of OrioleDB, the PostgreSQL community stands on the brink of a new era where the haunting specter of VACUUM is a thing of the past. This novel engine offers a compelling solution to one of PostgreSQL's longest-standing challenges, promising users increased efficiency and fewer maintenance headaches.
+
+So why wait? [Visit our github](https://github.com/orioledb/orioledb) and try OrioleDB today and join the revolution to a more streamlined, efficient, and VACUUM-free PostgreSQL experience.

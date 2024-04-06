@@ -1,17 +1,17 @@
-endi:
-  name: Endilie Yacop Sucipto
-  title: Maintainer of Docusaurus
-  url: https://github.com/endiliey
-  image_url: https://github.com/endiliey.png
+alexander_korotkov:
+  name: Alexander Korotkov
+  title: Creator of OrioleDB
+  url: https://github.com/akorotkov
+  image_url: https://github.com/akorotkov.png
 
-yangshun:
-  name: Yangshun Tay
-  title: Front End Engineer @ Facebook
-  url: https://github.com/yangshun
-  image_url: https://github.com/yangshun.png
+pavel_borisov:
+  name: Pavel Borisov
+  title: PostgreSQL contributor
+  url: https://github.com/pashkinelfe
+  image_url: https://github.com/pashkinelfe.png
 
-slorber:
-  name: Sébastien Lorber
-  title: Docusaurus maintainer
-  url: https://sebastienlorber.com
-  image_url: https://github.com/slorber.png
+imre:
+  name: Imre Samu
+  title: OrioleDB contributor
+  url: https://github.com/ImreSamu
+  image_url: https://github.com/ImreSamu.png

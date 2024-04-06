@@ -1,0 +1,45 @@
+---
+slug: wraparound-freeze
+title: Solving the Wraparound Freeze Problem in PostgreSQL
+description: When Hell Freezes Over?
+authors: [alexander_korotkov]
+tags: [release-notes]
+---
+
+Postgres is great… until it's not... In the past few years, there have been a few major public outages of a cloud service, like [MailChimp's Mandril](https://mailchimp.com/what-we-learned-from-the-recent-mandrill-outage/), [Joyent's Manta Storage](https://www.tritondatacenter.com/blog/manta-postmortem-7-27-2015), and [Sentry's monitoring service](https://blog.sentry.io/transaction-id-wraparound-in-postgres/). Invariably, the outages affect applications that use Postgres in write-heavy workloads.
+
+As cloud-based services go through a drastic growth spurt, the expectations for their Postgres-centered storage are expected to keep up. Simply scaling up the size of the server that runs Postgres does not fix certain problems that come with growth in traffic.
+
+Fortunately, these outages are far and few, but nonetheless, they leave a huge black eye for the teams affected, unhappiness in their customer base, and embarrassment in the community. Due to many startups practicing radical transparency in their operations, we are able to study the root causes of these outages and identify where improvements can be made.
+
+First, the good news: there is a major improvement coming in the Postgres storage system, via OrioleDB as a new open-source pluggable storage system to the Postgres project. OrioleDB takes a greenfield approach to solve several thorny problems in the Postgres architecture. Some of the benefits have been recently [covered here](https://supabase.com/blog/postgres-pluggable-strorage).
+
+But let's step back and understand how we got here. Postgres was first designed in the 1980's and presented at SIGMOD [‘86](https://dl.acm.org/doi/pdf/10.1145/16856.16888) and [‘87](https://dsf.berkeley.edu/papers/ERL-M87-06.pdf).
+
+### What are these 32-bit xids
+
+PostgreSQL, one of the most popular relational database systems, employs a [unique mechanism for handling transaction IDs (xids)](https://devcenter.heroku.com/articles/postgresql-concurrency). Historically, PostgreSQL uses 32-bit xids. Given that modern informational systems can't tolerate the restriction of 2^32 ~= 4 billion transactions total, PostgreSQL uses 32-bit xids in a ring. This methodology allows to serve generally an infinite number of transactions, but it poses certain challenges. The primary concern is differentiating future xids from past ones. This means we can have up to 2 billion of xids total in use to keep things consistent.
+
+In turn, this necessitates the data freeze mechanism to prevent wraparound. Let's delve deeper into this intricate process.
+
+### The Role of Data Freeze and the Birth of Freezemap
+
+Data freeze in PostgreSQL is special mode of VACUUM process. This is mode VACUUM replaces xids too far in the past with special "frozen" xid value. However, this necessity can often be an inconvenience. Freezing leads to extra resouces consumption. If freeze wasn't finished in time, the could lead to interrupting the seamless flow of database operations.
+
+Addressing this issue, PostgreSQL 9.6 introduced the freezemap, a data structure responsible for tracking data pages that have been frozen and have remained unmodified since the previous freeze. This system significantly improved the efficiency of the data freeze process by eliminating redundant operations.
+
+### Beyond Wraparound: Truncating SLRUs
+
+Interestingly, the prevention of 32-bit xids wraparound is not the only reason for data freeze in PostgreSQL. Data freeze also plays a critical role in truncating Simple LRU (Least Recently Used) buffers, commonly referred to as SLRUs. These are special data structures holding meta-information including pg_xact, pg_commit_ts, pg_multixact, and others. The truncation of SLRUs typically isn't considered as a problem, given that they have limited size for 32-bit xids. But things can be changed if we migrate to 64-bit xids.
+
+### The Pending 64-bit Xids Patchset
+
+A potential solution to the wraparound problem is the implementation of 64-bit xids. [A patchset for this](https://commitfest.postgresql.org/43/3594/) is currently on the commitfest. While this upgrade could significantly alleviate the urgent need for data freeze to prevent wraparound, it does not eliminate the necessity of data freeze for SLRU truncation. This is become more challenging give that SLRUs now doesn't have a firm size restription originating in 32-bit xids. Specifically, pg_multixact, which expands quickly with the use of row-level locks, that becomes even more challenging to manage because 64-bit xids double its size. Moreover, the 64-bit xids patch makes individual freezes more painful because the freezemap offers less assistance.
+
+Also, the 64-bit xids patchset comes with its own set of limitations. Per-tuple xids remain at 32-bit to prevent the tuple header from growing from 24-bytes to 32 bytes. This patchset adds base values of xids to the page header, with per-tuple values being relative to this base value. This introduces a restriction where the per-page range of xids is limited to 32-bit, which continues to present challenges.
+
+### OrioleDB: A Glimpse at the Future
+
+The journey towards a more seamless solution requires a comprehensive redesign of the storage system. Simply migrating to 64-bit xids does not solve the entire problem. [OrioleDB](https://github.com/orioledb/orioledb) offers a promising solution to this conundrum. It provides native 64-bit xids without artificial restrictions and replaces SLRUs with an undo-log. Given that aborted transactions are rolled back immediately, the need for data freeze to truncate the meta-information is eliminated.
+
+In conclusion, while the current mechanism of wraparound and data freeze in PostgreSQL is effective, it does have limitations. Freezemap in PostgreSQL 9.6 significanly mitigates the issue. The proposed 64-bit xids patchset could mitigate it even more. However, long-term solution requires the storate system redesign. OrioleDB provides this redesign paving the way to a future with more efficient and streamlined database operations.

@@ -7,13 +7,19 @@ export default function HomepageSections(): JSX.Element {
     <>
       <section>
         <div className="container margin-vert--xl">
-          <div className="text--center">
-            <Heading as="h2">Scalability</Heading>
-            <p>
-              The novel design of OrioleDB removes major DBMS scalability
-              bottlenecks. OrioleDB unleashes the power of modern hardware
-              achieving extraordinary performance.
-            </p>
+          <div className="row">
+            <div className="col col--6 col--offset-3">
+              <div className="text--center">
+                <Heading as="h2" className="text--uppercase">
+                  Scalability
+                </Heading>
+                <p>
+                  OrioleDB utilizes the{" "}
+                  <strong>power of modern hardware</strong> to achieve
+                  extraordinary performance.
+                </p>
+              </div>
+            </div>
           </div>
           <div className="row">
             <div className="col col--6">
@@ -34,15 +40,21 @@ export default function HomepageSections(): JSX.Element {
       <section>
         <div className="container margin-vert--xl">
           <div className="text--center">
-            <Heading as="h2">Efficiency</Heading>
+            <Heading as="h2" className="text--uppercase">
+              Efficiency
+            </Heading>
+
             <p>
-              OrioleDB’s architecture dramatically reduces the resources used
-              for transaction processing. .
+              OrioleDB’s architecture dramatically{" "}
+              <strong>reduces resources</strong> used for transaction
+              processing.
             </p>
           </div>
           <div className="row">
             <div className="col col--6">
-              <img src="/img/site/juno-read-iops.png" alt="Scalability" />
+              <div className="card__image">
+                <img src="/img/site/juno-read-iops.png" alt="Scalability" />
+              </div>
             </div>
             <div className="col col--6">
               <img src="/img/site/juno-write-iops.png" alt="Scalability" />

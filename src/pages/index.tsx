@@ -15,7 +15,7 @@ function HomepageHeader() {
       <div className="container">
         <div className="row">
           <div className="col col--6 padding--lg">
-            <Heading as="h1" className="hero__title">
+            <Heading as="h2" className="hero__title">
               {siteConfig.tagline}
             </Heading>
             <p className="hero__subtitle">

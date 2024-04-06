@@ -15,13 +15,6 @@
   }
 }
 
-h1.hero__title {
-  color: #fff !important;
-}
-p.hero__subtitle {
-  color: #fff !important;
-}
-
 .buttons {
   display: flex;
 }

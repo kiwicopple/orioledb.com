@@ -5,7 +5,6 @@
 
 .heroBanner {
   padding: 4rem 0;
-  text-align: center;
   position: relative;
   overflow: hidden;
 }
@@ -16,8 +15,13 @@
   }
 }
 
+h1.hero__title {
+  color: #fff !important;
+}
+p.hero__subtitle {
+  color: #fff !important;
+}
+
 .buttons {
   display: flex;
-  align-items: center;
-  justify-content: center;
 }

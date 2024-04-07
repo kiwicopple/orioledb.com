@@ -17,8 +17,8 @@ export default function HomepageBanner(): JSX.Element {
             </Heading>
             <p className={clsx("hero__subtitle", styles.heroSubtitle)}>
               OrioleDB is a PostgreSQL extension that combines the advantages of
-              both on-disk and in-memory engines. Increase your database
-              performance and cut costs.
+              both on-disk and in-memory engines. It uses PostgreSQL pluggable
+              storage to increase performance and cut costs.
             </p>
             <div className={styles.buttons}>
               <Link

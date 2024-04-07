@@ -4,7 +4,7 @@ import type * as Preset from "@docusaurus/preset-classic"
 
 const config: Config = {
   title: "OrioleDB",
-  tagline: "The next-generation storage engine for PostgreSQL",
+  tagline: "The cloud-native storage engine for PostgreSQL",
   favicon: "img/favicon.ico",
 
   // Set the production url of your site here

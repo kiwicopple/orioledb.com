@@ -39,7 +39,24 @@ Until then, you can use our [pre-built Docker image](https://hub.docker.com/r/or
 
 ## Patch set
 
-TODO: Add patch set
+The following patches have been submitted to the PostgreSQL community to enable pluggable storage:
+
+|         | Name                                                              | Link                                                                                         | Expected version |
+| ------- | ----------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | ---------------- |
+| :email: | Allow table AM to store complex data structures in rd_amcache     | [Link](https://github.com/postgres/postgres/commit/02eb07ea89d27f1d05a5055bf779042d2953b4e7) | PostgreSQL 17    |
+| :email: | Allow table AM tuple_insert() method to return the different slot | [Link](https://github.com/postgres/postgres/commit/c35a3fb5e067fc95f13206418e3785d2cb059da1) | PostgreSQL 17    |
+| :email: | Add TupleTableSlotOps.is_current_xact_tuple() method              | [Link](https://github.com/postgres/postgres/commit/0997e0af273d80add75bcf5616eee000d0a78397) | PostgreSQL 17    |
+| :email: | Allow locking updated tuples in tuple_update() and tuple_delete() | [Link](https://github.com/postgres/postgres/commit/87985cc9252296f11db3cacc155e8d710d2e9b9c) | PostgreSQL 17    |
+| :email: | Add EvalPlanQual delete returning isolation test                  | [Link](https://github.com/postgres/postgres/commit/8ffc2aa720a2bdef33b16609ed4f8ed07932c141) | PostgreSQL 17    |
+| :email: | Generalize relation analyze in table AM interface                 | [Link](https://github.com/postgres/postgres/commit/27bc1772fc814946918a5ac8ccb9b5c5ad0380aa) | PostgreSQL 17    |
+| :email: | Custom reloptions for table AM                                    | [Link](https://github.com/postgres/postgres/commit/c95c25f9af4bc77f2f66a587735c50da08c12b37) | PostgreSQL 17    |
+| :email: | Let table AM insertion methods control index insertion            | [Link](https://github.com/postgres/postgres/commit/b1484a3f1910bfd0e254afe40085dfc3351bda8c) | PostgreSQL 17    |
+
+##### Legend
+
+:white_check_mark: - Patch has been accepted.<br />
+:email: - Patch is sumbitted and under review by the PostgreSQL community.<br />
+:pencil2: - Patch is being worked on.<br />
 
 ## Resources
 

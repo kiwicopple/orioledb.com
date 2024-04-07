@@ -14,24 +14,28 @@ Update of primary key is typically rare and unusual situation in index-organized
 ```sql
 CREATE TABLE tbl
 (
-	id int4 primary key,
-	value numeric NOT NULL
+  id int4 primary key,
+  value numeric NOT NULL
 ) USING orioledb;
-INSERT INTO tbl VALUES (1, 0.0);
 
-(Session 1)
+INSERT INTO tbl VALUES (1, 0.0);
+```
+
+```bash title="Session 1"
 > BEGIN;
 > UPDATE tbl SET id = 2 WHERE id = 1;
 UPDATE 1
-				(Session 2)
-				> BEGIN;
-				> UPDATE tbl SET value = value + 1 WHERE id = 1;
-				(waiting)
+```
+
+```bash title="Session 2"
+> BEGIN;
+> UPDATE tbl SET value = value + 1 WHERE id = 1;
+(waiting)
 > COMMIT;
 COMMIT
-				ERROR:  tuple to be locked has its primary key changed due to concurrent update
-				> ROLLBACK;
-				ROLLBACK
+ERROR:  tuple to be locked has its primary key changed due to concurrent update
+> ROLLBACK;
+ROLLBACK
 ```
 
 ## Following the update chain
@@ -41,24 +45,28 @@ If some row was deleted and then new row with same primary key value is immediat
 ```sql
 CREATE TABLE tbl
 (
-	id int4 primary key,
-	value numeric NOT NULL
+  id int4 primary key,
+  value numeric NOT NULL
 ) USING orioledb;
-INSERT INTO tbl VALUES (1, 0.0);
 
-(Session 1)
+INSERT INTO tbl VALUES (1, 0.0);
+```
+
+```bash title="Session 1"
 > BEGIN;
 > DELETE FROM tbl WHERE id = 1;
 DELETE 1
 > INSERT INTO tbl VALUES (1, 0.0);
 INSERT 0 1
-				(Session 2)
-				> BEGIN;
-				> UPDATE tbl SET value = value + 1 WHERE id = 1;
-				(waiting)
+```
+
+```bash title="Session 2"
+> BEGIN;
+> UPDATE tbl SET value = value + 1 WHERE id = 1;
+(waiting)
 > COMMIT;
 COMMIT
-				UPDATE 1
-				> COMMIT;
-				COMMIT
+UPDATE 1
+> COMMIT;
+COMMIT
 ```

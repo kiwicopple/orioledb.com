@@ -5,21 +5,32 @@ sidebar_label: Getting Started
 
 # Usage
 
-OrioleDB is implemented using the table access method interface. Therefore, to define a table using the OrioleDB engine, one should specify `USING orioledb;` in the `CREATE TABLE` command.
+OrioleDB uses PosgreSQL's built-in Table Access Method API. When you create a table you can specify `USING orioledb;`.
 
-OrioleDB uses index-organized tables. So, the selection of the primary key is a very critical decision affecting performance. If you specify no primary key, then a hidden surrogate primary key will be created over the virtual `ctid` column.
+## Quick start
 
-## Collations
+### Starting PostgreSQL
 
-OrioleDB tables support only ICU, C, and POSIX collations. So, make sure the cluster or database is set up with default collations that fall under those options, otherwise you have to write COLLATE for every "text" field of the table.
+The OrioleDB extension requires PostgreSQL pluggable Storage. Until the PostgreSQL community merges the [required patches](/docs#patch-set), you can use the OrioleDB docker image to start PostgreSQL on your machine:
 
-ALTER COLLATION REFRESH VERSION is also disabled for collations that used for fields and indexes of orioledb tables.
+```bash title="bash"
+docker run -d --name orioledb -p 5432:5432 orioledb/orioledb
+```
 
-## Example
+### Enabling the extension
 
-Let's define the `blog_post` table, which stores blog posts and has two indices: primary key on the `id` column and secondary key by `published_at` column.
+You can enable the OrioleDB extension by running the following command:
 
-```sql
+```sql title="psql"
+CREATE EXTENSION orioledb;
+```
+
+### Creating tables
+
+Let's define a `blog_post` table, which stores blog posts and has two indices: primary key on the `id` column and secondary key by `published_at` column.
+
+```sql title="psql"
+-- Create a table
 CREATE TABLE blog_post
 (
     id int8 NOT NULL,
@@ -29,16 +40,37 @@ CREATE TABLE blog_post
     published_at timestamptz  NOT NULL DEFAULT CURRENT_TIMESTAMP,
     views bigint NOT NULL,
     PRIMARY KEY(id)
-) USING orioledb;
+) USING orioledb; -- Define the storage engine
+
+-- Create an index
 CREATE INDEX blog_post_published_at ON blog_post(published_at);
 ```
 
-The created table could be used in regular DML queries, including SELECT/INSERT/UPDATE/DELETE and INSERT ON CONFLICT.
+OrioleDB uses index-organized tables. So, the selection of the primary key is a very critical decision affecting performance. If you do not specify a primary key, a hidden surrogate primary key will be created over the virtual `ctid` column.
+
+### Querying tables
+
+Query your tables using regular DML queries, including `SELECT`, `INSERT`, `UPDATE`, `DELETE` and `INSERT ON CONFLICT`.
+
+For example:
+
+```sql title="psql"
+INSERT INTO blog_post (id, title, body, author, views)
+VALUES (1, 'Hello, World!', 'This is my first blog post.', 'John Doe', 1000);
+
+SELECT * FROM blog_post ORDER BY published_at DESC LIMIT 10;
+
+```
+
+### View query plans
 
 Plans of queries involving OrioleDB tables could be viewed using `EXPLAIN` clause as usual. OrioleDB uses Custom Scan nodes named o_scan for scanning tables.
 
 ```sql
-# EXPLAIN SELECT * FROM blog_post ORDER BY published_at DESC LIMIT 10;
+EXPLAIN SELECT * FROM blog_post ORDER BY published_at DESC LIMIT 10;
+```
+
+```bash title="Result"
                                    QUERY PLAN
 -----------------------------------------------------------------------
  Limit  (cost=0.15..1.67 rows=10 width=120)
@@ -49,7 +81,10 @@ Plans of queries involving OrioleDB tables could be viewed using `EXPLAIN` claus
 ```
 
 ```sql
-# EXPLAIN SELECT * FROM blog_post WHERE id = 1;
+EXPLAIN SELECT * FROM blog_post WHERE id = 1;
+```
+
+```bash title="Result"
                               QUERY PLAN
 -----------------------------------------------------------------------
  Custom Scan (o_scan) on blog_post  (cost=0.15..8.17 rows=1 width=120)
@@ -78,6 +113,12 @@ Plans of queries involving OrioleDB tables could be viewed using `EXPLAIN` claus
  Execution Time: 0.079 ms
 (9 rows)
 ```
+
+## Collations
+
+OrioleDB tables support only ICU, C, and POSIX collations. So, make sure the cluster or database is set up with default collations that fall under those options, otherwise you have to write COLLATE for every "text" field of the table.
+
+ALTER COLLATION REFRESH VERSION is also disabled for collations that used for fields and indexes of orioledb tables.
 
 ## Block-level data compression
 

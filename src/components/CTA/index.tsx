@@ -1,5 +1,6 @@
 import clsx from "clsx"
 import Link from "@docusaurus/Link"
+import { Slider } from "../ui/slider"
 
 import styles from "./styles.module.css"
 
@@ -14,6 +15,7 @@ export default function HomepageSections(): JSX.Element {
               both on-disk and in-memory engines. Increase your database
               performance and cut costs.
             </p>
+            <Slider defaultValue={[33]} max={100} step={1} />
           </div>
           <div className="col col--4 padding--lg">
             <div className={styles.buttons}>

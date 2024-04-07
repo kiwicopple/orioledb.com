@@ -1,3 +1,4 @@
+const path = require("path")
 import { themes as prismThemes } from "prism-react-renderer"
 import type { Config } from "@docusaurus/types"
 import type * as Preset from "@docusaurus/preset-classic"
@@ -167,6 +168,14 @@ const config: Config = {
         },
       }
     },
+    [
+      "docusaurus-plugin-module-alias",
+      {
+        alias: {
+          "@/component": path.resolve(__dirname, "../src/index.js"),
+        },
+      },
+    ],
   ],
 }
 

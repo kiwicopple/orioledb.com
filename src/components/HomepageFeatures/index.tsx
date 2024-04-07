@@ -71,7 +71,7 @@ function Feature({ title, icon, description }: FeatureItem) {
           <Heading as="h3">{title}</Heading>
         </div>
         <div className="card__body">
-          <p>{description}</p>
+          <p className="bg-red-500">{description}</p>
         </div>
       </div>
     </div>

@@ -14,8 +14,8 @@ function HomepageHeader() {
   return (
     <header className={clsx("hero hero--primary", styles.heroBanner)}>
       <div className="container">
-        <div className="row">
-          <div className="col col--6 padding--lg">
+        <div className="flex flex-col md:flex-row">
+          <div className="md:w-1/2">
             <Heading as="h2" className="hero__title">
               {siteConfig.tagline}
             </Heading>
@@ -39,7 +39,7 @@ function HomepageHeader() {
               </Link>
             </div>
           </div>
-          <div className="col col--6 padding-top--lg">
+          <div className="md:w-1/2">
             <img
               className={styles.heroImage}
               src="/img/banner.png"

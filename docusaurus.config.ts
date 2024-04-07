@@ -144,17 +144,30 @@ const config: Config = {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,
     },
-    plugins: [
-      [
-        "@docusaurus/plugin-content-docs",
-        {
-          id: "docs-intro",
-          path: "docs",
-          routeBasePath: "/docs",
-        },
-      ],
-    ],
   } satisfies Preset.ThemeConfig,
+
+  // Plugins
+  plugins: [
+    // [
+    //   "@docusaurus/plugin-content-docs",
+    //   {
+    //     id: "docs-intro",
+    //     path: "docs",
+    //     routeBasePath: "/docs",
+    //   },
+    // ],
+    function tailwindPlugin(context, options) {
+      return {
+        name: "docusaurus-tailwindcss",
+        configurePostCss(postcssOptions) {
+          // Appends TailwindCSS and AutoPrefixer.
+          postcssOptions.plugins.push(require("tailwindcss"))
+          postcssOptions.plugins.push(require("autoprefixer"))
+          return postcssOptions
+        },
+      }
+    },
+  ],
 }
 
 export default config

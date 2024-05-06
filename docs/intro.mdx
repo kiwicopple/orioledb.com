@@ -57,7 +57,9 @@ Something like this is already available in MySQL, which uses the `InnoDB` as th
 
 ## Using OrioleDB with existing PostgreSQL installations
 
-OrioleDB currently requires a set of patches to PostgreSQL to enhance the pluggable storage API. All of these patches have been submitted to the PostgreSQL community and are under review.
+OrioleDB currently requires a set of patches to PostgreSQL to enhance the pluggable storage API and other PostgreSQL subsystems. All of these patches have been submitted to the PostgreSQL community and are under review.
+
+The important property of this set of patches is keeping the binary compatibility.  That is, you can switch to the patched PostgreSQL binary while keeping the same data directory.  The existing tables will continue working with the default `heap` engine until you switch them to use `orioledb`.  Moreover, it's possible to switch back to using unpatched PostgreSQL binaries.  You would just need to convert your `orioledb` tables back to heap before.
 
 The goal is to upstream everything: once these patches are accepted, OrioleDB will be able to run on any PostgreSQL installation without any modifications. This will also enable the entire PostgreSQL community to create their own pluggable storage engines.
 
@@ -65,18 +67,29 @@ Until then, you can use our [pre-built Docker image](https://hub.docker.com/r/or
 
 ## Patch set
 
-The following patches have been submitted to the PostgreSQL community to enhance Pluggable Storage:
+You can get the full set of patches [here](https://github.com/orioledb/postgres/commits/patches16/).
+The following patches have been submitted to the PostgreSQL community to enhance the TAM interface and other subsystems.
 
-|         | Name                                                              | Link                                                                                         | Expected version |
-| ------- | ----------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | ---------------- |
-| :email: | Allow table AM to store complex data structures in rd_amcache     | [Link](https://github.com/postgres/postgres/commit/02eb07ea89d27f1d05a5055bf779042d2953b4e7) | PostgreSQL 17    |
-| :email: | Allow table AM tuple_insert() method to return the different slot | [Link](https://github.com/postgres/postgres/commit/c35a3fb5e067fc95f13206418e3785d2cb059da1) | PostgreSQL 17    |
-| :email: | Add TupleTableSlotOps.is_current_xact_tuple() method              | [Link](https://github.com/postgres/postgres/commit/0997e0af273d80add75bcf5616eee000d0a78397) | PostgreSQL 17    |
-| :email: | Allow locking updated tuples in tuple_update() and tuple_delete() | [Link](https://github.com/postgres/postgres/commit/87985cc9252296f11db3cacc155e8d710d2e9b9c) | PostgreSQL 17    |
-| :email: | Add EvalPlanQual delete returning isolation test                  | [Link](https://github.com/postgres/postgres/commit/8ffc2aa720a2bdef33b16609ed4f8ed07932c141) | PostgreSQL 17    |
-| :email: | Generalize relation analyze in table AM interface                 | [Link](https://github.com/postgres/postgres/commit/27bc1772fc814946918a5ac8ccb9b5c5ad0380aa) | PostgreSQL 17    |
-| :email: | Custom reloptions for table AM                                    | [Link](https://github.com/postgres/postgres/commit/c95c25f9af4bc77f2f66a587735c50da08c12b37) | PostgreSQL 17    |
-| :email: | Let table AM insertion methods control index insertion            | [Link](https://github.com/postgres/postgres/commit/b1484a3f1910bfd0e254afe40085dfc3351bda8c) | PostgreSQL 17    |
+|                    | Name                                                              | Link                                                                                         | Version          |
+| ------------------ | ----------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | ---------------- |
+| :white_check_mark: | Add missing inequality searches to rbtree                         | [Link](https://github.com/postgres/postgres/commit/e57519a4637a8d88ae993ac1273d2b59d03a0f75) | PostgreSQL 16    |
+| :white_check_mark: | Document the ability to specify TableAM for pgbench               | [Link](https://github.com/postgres/postgres/commit/f77ff083350eb5a2625a4dbfca61d15b66c4918b) | PostgreSQL 16    |
+| :white_check_mark: | Remove Tuplesortstate.copytup function                            | [Link](https://github.com/postgres/postgres/commit/d47da3162b4d77c888c895dd36e4ef9cb92fcf19) | PostgreSQL 16    |
+| :white_check_mark: | Add new Tuplesortstate.removeabbrev function                      | [Link](https://github.com/postgres/postgres/commit/cadfdd1edff103d696bbfcdd126c2dee516aed9b) | PostgreSQL 16    |
+| :white_check_mark: | Put abbreviation logic into puttuple_common()                     | [Link](https://github.com/postgres/postgres/commit/033dd02db2248ed792332b950431ced4771b8304) | PostgreSQL 16    |
+| :white_check_mark: | Move memory management away from writetup() and tuplesort_put*()  | [Link](https://github.com/postgres/postgres/commit/097366c45f5dfe142eb232dc6d348ca0705a63a9) | PostgreSQL 16    |
+| :white_check_mark: | Split TuplesortPublic from Tuplesortstate                         | [Link](https://github.com/postgres/postgres/commit/ec92fe98356a8a36427fe9ef52873b50fe17852e) | PostgreSQL 16    |
+| :white_check_mark: | Split tuplesortvariants.c from tuplesort.c                        | [Link](https://github.com/postgres/postgres/commit/d0b193c0fad13cf35122b0d3dc805c76e323e8bf) | PostgreSQL 16    |
+| :white_check_mark: | Fix typo in comment for writetuple() function                     | [Link](https://github.com/postgres/postgres/commit/924954c670355f2a0ca1dd4173574a28fc0eedec) | PostgreSQL 16    |
+| :white_check_mark: | Support for custom slots in the custom executor nodes             | [Link](https://github.com/postgres/postgres/commit/cee120951427fe39a54ab800abfa2834d85b8771) | PostgreSQL 16    |
+| :email:            | Allow table AM to store complex data structures in rd_amcache     | [Link](https://commitfest.postgresql.org/48/4958/)                                           | PostgreSQL 18    |
+| :email:            | Allow table AM tuple_insert() method to return the different slot | [Link](https://commitfest.postgresql.org/48/4958/)                                           | PostgreSQL 18    |
+| :email:            | Add TupleTableSlotOps.is_current_xact_tuple() method              | [Link](https://commitfest.postgresql.org/48/4958/)                                           | PostgreSQL 18    |
+| :email:            | Allow locking updated tuples in tuple_update() and tuple_delete() | [Link](https://commitfest.postgresql.org/48/4958/)                                           | PostgreSQL 18    |
+| :email:            | Add EvalPlanQual delete returning isolation test                  | [Link](https://commitfest.postgresql.org/48/4958/)                                           | PostgreSQL 18    |
+| :email:            | Generalize relation analyze in table AM interface                 | [Link](https://commitfest.postgresql.org/48/4958/)                                           | PostgreSQL 18    |
+| :email:            | Custom reloptions for table AM                                    | [Link](https://commitfest.postgresql.org/48/4958/)                                           | PostgreSQL 18    |
+| :email:            | Let table AM insertion methods control index insertion            | [Link](https://commitfest.postgresql.org/48/4958/)                                           | PostgreSQL 18    |
 
 ##### Legend
 
@@ -124,8 +137,8 @@ OrioleDB utilizes copy-on-write checkpoints, which provides a structurally consi
 
 ### Hacker news
 
-- [OrioleDB - solving some PostgreSQL wicked problems ](https://news.ycombinator.com/item?id=30462695)
-- [ PostgreSQL: No More Vacuum, No More Bloat](https://news.ycombinator.com/item?id=36740921)
+- [OrioleDB - solving some PostgreSQL wicked problems](https://news.ycombinator.com/item?id=30462695)
+- [PostgreSQL: No More Vacuum, No More Bloat](https://news.ycombinator.com/item?id=36740921)
 - [OrioleDB Reached Beta](https://news.ycombinator.com/item?id=36392765)
 
 ### Solving PostgreSQL Wicked Problems

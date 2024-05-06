@@ -7,6 +7,8 @@ tags: [deep-dive]
 
 Traditional database engines were designed in the '80s and early '90s. At that time CPUs were much slower than they are today. Even worse was storage, hard drive head positioning time was enormous[^1]. And CPU (or, at most, a few single-core CPUs) was assumed to be infinitely fast in comparison to IOPS. Therefore, systems were designed to save IOPS as much as possible, while CPU overhead was considered a secondary optimization target.
 
+[^1]: [Numbers Every Programmer Should Know By Year - Colin Scott](https://colin-scott.github.io/personal_website/research/interactive_latency.html)
+
 {/* truncate */}
 
 Nowadays, modern storage systems including NVMe and virtual distributed storage can produce millions of IOPS. Modern machines can have many terabytes of main memory allowing them to store the entire database or at least the active part. Also, they can include hundreds of CPU cores. Simply put, traditional assumptions are out of date and database engines need to evolve to leverage modern hardware.
@@ -100,5 +102,4 @@ PostgreSQL is an excellent DBMS, which has shown to be very scalable over decade
 
 ---
 
-[^1]: [Numbers Every Programmer Should Know By Year - Colin Scott](https://colin-scott.github.io/personal_website/research/interactive_latency.html)
 [^2]: [DeBrabant, J., Pavlo, A., Tu, S., Stonebraker, M., & Zdonik, S. (2013). Anti-caching: A new approach to database management system architecture. Proceedings of the VLDB Endowment, 6(14), 1942-1953.](https://dl.acm.org/doi/abs/10.14778/2556549.2556575)

@@ -151,6 +151,11 @@ const config: Config = {
           id: "docs-intro",
           path: "docs",
           routeBasePath: "/docs",
+          configureWebpack: () => ({
+            resolve: {
+              symlinks: false,
+            },
+          }),
         },
       ],
     ],
